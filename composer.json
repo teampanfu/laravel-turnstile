@@ -1,0 +1,45 @@
+{
+    "name": "teampanfu/laravel-turnstile",
+    "type": "library",
+    "description": "A Laravel package for Cloudflare's Turnstile service.",
+    "keywords": ["captcha", "cloudflare", "laravel", "turnstile"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Robin",
+            "email": "robin@panfu.us"
+        }
+    ],
+    "require": {
+        "php": "^7.2|^8.0",
+        "guzzlehttp/guzzle": "^6.2|^7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Panfu\\Laravel\\Turnstile\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Panfu\\Laravel\\Turnstile\\Test\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Panfu\\Laravel\\Turnstile\\TurnstileServiceProvider"
+            ],
+            "aliases": {
+                "Turnstile": "Panfu\\Laravel\\Turnstile\\Facades\\Turnstile"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
