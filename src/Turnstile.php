@@ -39,10 +39,15 @@ class Turnstile
     /**
      * Validate a response token with Cloudflare's Turnstile service.
      */
-    public function validate(?string $token, ?string $remoteip = null): bool
+    public function validate(?string $token, string $remoteip = null): bool
     {
-        if (empty($token) || in_array($token, $this->validatedResponses)) {
+        if (empty($token)) {
             return false;
+        }
+
+        // Check if the response has already been validated.
+        if (in_array($token, $this->validatedResponses)) {
+            return true;
         }
 
         $client = new Client();
@@ -57,7 +62,7 @@ class Turnstile
             $responseData = json_decode($response->getBody(), true);
 
             if (isset($responseData['success']) && $responseData['success'] === true) {
-                $this->validatedResponses[] = $response;
+                $this->validatedResponses[] = $token;
 
                 return true;
             } else {
