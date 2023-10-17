@@ -4,7 +4,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/teampanfu/laravel-turnstile.svg?style=flat-square)](https://packagist.org/packages/teampanfu/laravel-turnstile)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
-A Laravel package that seamlessly integrates [Cloudflare's Turnstile](https://developers.cloudflare.com/turnstile) service into your Laravel application.
+A package that seamlessly integrates [Cloudflare's Turnstile](https://developers.cloudflare.com/turnstile) service into your Laravel application.
 
 ## Installation
 
