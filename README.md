@@ -4,7 +4,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/teampanfu/laravel-turnstile.svg?style=flat-square)](https://packagist.org/packages/teampanfu/laravel-turnstile)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
-A package specifically designed to bring [Cloudflare's Turnstile](https://developers.cloudflare.com/turnstile) service directly into [Laravel](https://laravel.com).
+A Laravel package that seamlessly integrates [Cloudflare's Turnstile](https://developers.cloudflare.com/turnstile) service into your Laravel application.
 
 ## Installation
 
@@ -144,18 +144,18 @@ if (! empty($_POST)) {
 
 *Remote IP helps prevent abuses by ensuring that the current visitor is the one who received the token.*
 
-### Testing
+## Testing
 
 ```sh
 $ ./vendor/bin/phpunit
 ```
 
-### Contribute
+## Contribute
 
 If you find a bug or have a feature suggestion, feel free to create a new issue or pull request.
 
 We appreciate every contribution!
 
-### License
+## License
 
 This package is open-source software licensed under the [MIT License](LICENSE).
