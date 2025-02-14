@@ -39,7 +39,7 @@ class Turnstile
     /**
      * Validate a response token with Cloudflare's Turnstile service.
      */
-    public function validate(?string $token, string $remoteip = null): bool
+    public function validate(?string $token, ?string $remoteip = null): bool
     {
         if (empty($token)) {
             return false;
