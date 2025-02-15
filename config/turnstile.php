@@ -4,25 +4,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Site Key
+    | Cloudflare Turnstile Keys
     |--------------------------------------------------------------------------
     |
-    | Unique identifier for your website in Cloudflare's Turnstile service.
+    | These are the credentials needed to use Cloudflare's Turnstile service.
+    | You can find these in your Cloudflare dashboard.
     |
     */
 
     'sitekey' => env('TURNSTILE_SITEKEY', '1x00000000000000000000AA'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Secret Key
-    |--------------------------------------------------------------------------
-    |
-    | Cryptographic key for your website in Cloudflare's Turnstile service.
-    | Keep this secret and don't share it publicly.
-    |
-    */
-
     'secret' => env('TURNSTILE_SECRET', '1x0000000000000000000000000000000AA'),
 
 ];
