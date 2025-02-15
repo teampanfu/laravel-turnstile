@@ -16,7 +16,8 @@ class TurnstileTest extends TestCase
     public function test_validation_fails(): void
     {
         $turnstile = new Turnstile('2x0000000000000000000000000000000AA');
-        $this->assertFalse($turnstile->validate('XXXX.DUMMY.TOKEN.XXXX'));
+        $this->expectException(\RuntimeException::class);
+        $turnstile->validate('XXXX.DUMMY.TOKEN.XXXX');
     }
 
     public function test_empty_token_returns_false(): void
