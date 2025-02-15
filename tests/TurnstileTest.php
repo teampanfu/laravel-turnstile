@@ -10,13 +10,13 @@ class TurnstileTest extends TestCase
     public function test_validation_passes(): void
     {
         $turnstile = new Turnstile('1x0000000000000000000000000000000AA');
-        $this->assertTrue($turnstile->validate('test-token'));
+        $this->assertTrue($turnstile->validate('XXXX.DUMMY.TOKEN.XXXX'));
     }
 
     public function test_validation_fails(): void
     {
         $turnstile = new Turnstile('2x0000000000000000000000000000000AA');
-        $this->assertFalse($turnstile->validate('test-token'));
+        $this->assertFalse($turnstile->validate('XXXX.DUMMY.TOKEN.XXXX'));
     }
 
     public function test_empty_token_returns_false(): void
