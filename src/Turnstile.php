@@ -1,75 +1,83 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Panfu\Laravel\Turnstile;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\GuzzleException;
 
-class Turnstile
+final class Turnstile
 {
     /**
-     * The Turnstile siteverify endpoint.
-     *
-     * @var string
+     * The Cloudflare Turnstile verification endpoint.
      */
-    const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+    private const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
     /**
-     * The secret key used for validation with Cloudflare's Turnstile service.
-     *
-     * @var string
+     * The HTTP client instance.
      */
-    private $secret;
+    private Client $client;
 
     /**
-     * An array holding already validated responses to prevent re-validation.
+     * List of previously validated tokens.
      *
-     * @var array
+     * @var array<string>
      */
-    private $validatedResponses = [];
+    private array $validatedResponses = [];
 
     /**
-     * Create a new Turnstile instance with the provided secret key.
+     * Create a new Turnstile instance.
+     *
+     * @throws \InvalidArgumentException If secret is empty
      */
-    public function __construct($secret)
-    {
-        $this->secret = $secret;
+    public function __construct(
+        private readonly string $secret
+    ) {
+        if (empty($secret)) {
+            throw new \InvalidArgumentException('Turnstile secret key cannot be empty');
+        }
+        $this->client = new Client;
     }
 
     /**
-     * Validate a response token with Cloudflare's Turnstile service.
+     * Validate a Turnstile response token.
+     *
+     * @throws GuzzleException When the HTTP request fails
+     * @throws \RuntimeException When the validation response contains errors
      */
-    public function validate(?string $token, ?string $remoteip = null): bool
+    public function validate(?string $token, ?string $ip = null): bool
     {
         if (empty($token)) {
             return false;
         }
 
-        // Check if the response has already been validated.
-        if (in_array($token, $this->validatedResponses)) {
+        if (in_array($token, $this->validatedResponses, true)) {
             return true;
         }
 
-        $client = new Client();
-        $body = [
-            'secret' => $this->secret,
-            'response' => $token,
-            'remoteip' => $remoteip,
-        ];
+        $response = $this->client->post(self::SITEVERIFY_URL, [
+            'json' => [
+                'secret' => $this->secret,
+                'response' => $token,
+                'remoteip' => $ip,
+            ],
+        ]);
 
-        try {
-            $response = $client->post(self::SITEVERIFY_URL, ['json' => $body]);
-            $responseData = json_decode($response->getBody(), true);
+        $result = json_decode((string) $response->getBody(), true);
 
-            if (isset($responseData['success']) && $responseData['success'] === true) {
-                $this->validatedResponses[] = $token;
+        if ($result['success'] ?? false) {
+            $this->validatedResponses[] = $token;
 
-                return true;
-            } else {
-                return false;
-            }
-        } catch (RequestException $e) {
-            return false;
+            return true;
         }
+
+        if (isset($result['error-codes'])) {
+            throw new \RuntimeException(
+                'Challenge verification failed ('.implode(', ', $result['error-codes']).')'
+            );
+        }
+
+        return false;
     }
 }

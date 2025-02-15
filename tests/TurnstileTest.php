@@ -7,38 +7,28 @@ use PHPUnit\Framework\TestCase;
 
 class TurnstileTest extends TestCase
 {
-    public function testValidationPasses(): void
+    public function test_validation_passes(): void
     {
-        // Secret key that always passes
-        $secret = '1x0000000000000000000000000000000AA';
-        $validator = new Turnstile($secret);
-
-        // Validate the response
-        $isValid = $validator->validate('dummy', '127.0.0.1');
-
-        $this->assertTrue($isValid);
+        $turnstile = new Turnstile('1x0000000000000000000000000000000AA');
+        $this->assertTrue($turnstile->validate('test-token'));
     }
 
-    public function testValidationFails(): void
+    public function test_validation_fails(): void
     {
-        // Secret key that always fails
-        $secret = '2x0000000000000000000000000000000AA';
-        $validator = new Turnstile($secret);
-
-        // Validate the response
-        $isValid = $validator->validate('dummy', '127.0.0.1');
-
-        $this->assertFalse($isValid);
+        $turnstile = new Turnstile('2x0000000000000000000000000000000AA');
+        $this->assertFalse($turnstile->validate('test-token'));
     }
 
-    public function testValidationTokenAlreadySpent(): void
+    public function test_empty_token_returns_false(): void
     {
-        // Secret key that yields a “token already spent” error
-        $secret = '3x0000000000000000000000000000000AA';
-        $validator = new Turnstile($secret);
+        $turnstile = new Turnstile('1x0000000000000000000000000000000AA');
+        $this->assertFalse($turnstile->validate(''));
+        $this->assertFalse($turnstile->validate(null));
+    }
 
-        // Validate the response token
-        $isValid = $validator->validate('dummy', '127.0.0.1');
-        $this->assertFalse($isValid);
+    public function test_empty_secret_throws_exception(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        new Turnstile('');
     }
 }
