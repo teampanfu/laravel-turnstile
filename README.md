@@ -49,7 +49,7 @@ See [available configurations](https://developers.cloudflare.com/turnstile/get-s
 
 ```php
 $request->validate([
-    'cf-turnstile-response' => ['turnstile'],
+    'cf-turnstile-response' => ['required', 'turnstile'],
 ]);
 ```
 
